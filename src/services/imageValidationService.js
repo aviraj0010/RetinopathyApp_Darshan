@@ -1,4 +1,3 @@
-// services/imageValidationService.js
 import { Image } from 'react-native';
 
 export const validateEyeImage = (imageUri) => {
@@ -6,7 +5,7 @@ export const validateEyeImage = (imageUri) => {
     Image.getSize(
       imageUri,
       (width, height) => {
-        // Check if image has reasonable dimensions for an eye photo
+        
         const aspectRatio = width / height;
         const isReasonableSize = width >= 300 && height >= 300;
         const hasValidAspectRatio = aspectRatio >= 0.8 && aspectRatio <= 1.5;

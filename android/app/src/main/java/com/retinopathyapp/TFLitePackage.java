@@ -1,4 +1,3 @@
-// File: android/app/src/main/java/com/retinopathyapp/TFLitePackage.java
 package com.retinopathyapp;
 
 import com.facebook.react.ReactPackage;

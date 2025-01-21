@@ -3,7 +3,7 @@ import RNFS from 'react-native-fs';
 
 const { TFLiteModule } = NativeModules;
 
-// Helper to get the correct model path based on platform
+
 const getModelPath = () => {
   return Platform.select({
     android: `${RNFS.DocumentDirectoryPath}/model.tflite`,
@@ -19,34 +19,34 @@ export const initModel = async () => {
 
     const modelExists = await RNFS.exists(modelPath);
     if (!modelExists) {
-      console.log('Copying model from assets...');
+     
       await RNFS.copyFileAssets('model.tflite', modelPath);
-      console.log('Model copied successfully');
+     
     } else {
-      console.log('Model already exists in document directory');
+      
     }
 
-    console.log('Loading model...');
+    
     await TFLiteModule.loadModel(modelPath);
-    console.log('Model loaded successfully');
+    
     
     return true;
   } catch (error) {
-    console.error('Model initialization failed:', error);
+    console.error(':', error);
     throw error;
   }
 };
 
-// New helper function to ensure we have a local file
+
 const ensureLocalImage = async (imagePath) => {
-  console.log('Ensuring local image from:', imagePath);
+ 
   
-  // If it's already a local file, return it
+  
   if (imagePath.startsWith('file://') || imagePath.startsWith('/')) {
     return imagePath;
   }
 
-  // If it's a remote URL (http/https), download it
+  
   if (imagePath.startsWith('http')) {
     const filename = `temp_${Date.now()}.jpg`;
     const localPath = `${RNFS.CachesDirectoryPath}/${filename}`;
@@ -73,19 +73,19 @@ const ensureLocalImage = async (imagePath) => {
 
 export const processImage = async (imagePath) => {
   try {
-    console.log('Starting image processing...', imagePath);
+    
 
-    // Ensure we have a local file path
+    
     const localImagePath = await ensureLocalImage(imagePath);
-    console.log('Using local image path:', localImagePath);
+   
 
-    // Verify image exists
+    
     const imageExists = await RNFS.exists(localImagePath);
     if (!imageExists) {
-      throw new Error('Local image file not found');
+      throw new Error(':');
     }
 
-    // Get image stats
+    
     const imageStats = await RNFS.stat(localImagePath);
     console.log('Image stats:', imageStats);
 
@@ -93,7 +93,7 @@ export const processImage = async (imagePath) => {
       throw new Error('Image file is empty');
     }
 
-    // Process image
+    
     console.log('Calling TFLiteModule.analyzeImage...');
     const results = await TFLiteModule.analyzeImage(localImagePath);
     
@@ -109,7 +109,7 @@ export const processImage = async (imagePath) => {
       condition: mapClassificationToCondition(results.classification)
     };
 
-    // Clean up temporary file if it was downloaded
+    
     if (localImagePath.startsWith(RNFS.CachesDirectoryPath)) {
       RNFS.unlink(localImagePath).catch(err => 
         console.warn('Failed to cleanup temporary image:', err)
